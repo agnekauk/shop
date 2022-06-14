@@ -61,6 +61,14 @@ h2 {
     animation-delay: .4s;
 }
 
+.photo-label {
+    padding: 5px;
+    font-size: 14px;
+    text-align: center;
+    width: 100%;
+
+}
+
 @keyframes rotate {
     0% {
         transform: translate(-50%, -50%) rotateZ(0deg);

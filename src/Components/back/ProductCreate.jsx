@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { useState, useContext } from "react";
 import BackContext from "../../Contexts/BackContexts";
+import getBase64 from "../../Functions/getBase64";
 
 const empty = {
        title: '',
@@ -14,13 +15,21 @@ function ProductCreate () {
     const {setCreateProductData} = useContext(BackContext);
 
     const button = useRef();
+    const fileInput = useRef();
     
     const [inputs, setInputs] = useState(empty);
 
     const handleInputs = (e, input) => setInputs(i => ({...i, [input]: e.target.value}));
 
     const create = () => {
-        setCreateProductData({...inputs, price: parseFloat(inputs.price)});
+        const file = fileInput.current.files[0];
+
+        if(file) {
+            getBase64(file)
+            .then(photo => setCreateProductData({...inputs, photo, price: parseFloat(inputs.price)}));
+        } else {
+            setCreateProductData({...inputs, price: parseFloat(inputs.price)});
+        }
         setInputs(empty);
         button.current.blur();
     }    
@@ -57,6 +66,10 @@ function ProductCreate () {
                                     <label className="fu gray">Aprašymas:</label>
                                     <textarea className="form-control" rows="3" value={inputs.description} onChange ={e => handleInputs(e, 'description')}></textarea>
                                 </div>
+                            </div>
+                            <div className="form-group">
+                                <input type="file" ref = {fileInput} className="form-control fu"/>
+                                <label className="photo-label fu">Pasirinkite nuotrauką</label>
                             </div>
                             <div className="col-12">
                                 <div className="mt-3">
